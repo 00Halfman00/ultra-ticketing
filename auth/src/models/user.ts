@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Password } from '../services/password';
 
 /*  INTERFACE 1: UserAttrs
 Interface that describes the properties required to create an instance of a new user
@@ -37,9 +38,28 @@ const userSchema = new mongoose.Schema<UserDoc>({
   },
   password: {
     type: String,
-    require: true,
+    required: true,
   },
 });
+
+userSchema.pre(
+  'save',
+  async function (this: UserDoc, done: (err?: Error) => void) {
+    if (this.isModified('password')) {
+      try {
+        const hashed = await Password.toHash(this.get('password'));
+        this.set('password', hashed);
+        done();
+      } catch (err) {
+        console.error(err);
+        done(err as Error); // Pass the error to the next middleware or error handler // Type assertion
+      }
+    } else {
+      done();
+    }
+  }
+);
+
 /*
 To do effective type checking when using TypeScript with Mongoose and creating a document,
 a function will be used to engineer proper type checking,

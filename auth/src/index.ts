@@ -30,6 +30,7 @@ const startServers = async () => {
     const db = await mongoose.connect(
       'mongodb://auth-mongo-clusterip-srv:27017/auth-db'
     );
+    console.log(`Mongo Server listening on port: 27017`);
   } catch (err) {
     console.error('Database connection error:', err);
     // Important: Exit the process if the database connection fails
