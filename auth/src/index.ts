@@ -1,6 +1,8 @@
+import config from './config';
 import express from 'express';
 import 'express-async-errors';
 import mongoose from 'mongoose';
+import cookieSession from 'cookie-session';
 
 import { currentUserRouter } from './routes/current-user';
 import { signoutRouter } from './routes/signout';
@@ -9,13 +11,18 @@ import { singinRouter } from './routes/singin';
 import { errorHandler } from './middlewares/error-handlers';
 import { NotFoundError } from './errors/not-found-error';
 
-import { User } from './models/user';
-
-const PORT = 3000;
 const app = express();
 
-app.use(express.json());
-console.log('ticketing');
+app.set('trust proxy', true); // to allow traffic coming from proxy: ingress nginx
+
+app.use(express.json()); // middleware is responsible for parsing the body of incoming requests that have a Content-Type header of application/json
+app.use(
+  cookieSession({
+    keys: [config.cookieKey], // Use a simple key (NOT for production) needed when secure is set to true
+    signed: true, // disable encryption on cookie // jwt inside cookie will be encrypted
+    secure: true, // only https
+  })
+);
 app.use(currentUserRouter);
 app.use(signoutRouter);
 app.use(singupRouter);
@@ -27,17 +34,15 @@ app.use(errorHandler);
 
 const startServers = async () => {
   try {
-    const db = await mongoose.connect(
-      'mongodb://auth-mongo-clusterip-srv:27017/auth-db'
-    );
+    const db = await mongoose.connect(config.db);
     console.log(`Mongo Server listening on port: 27017`);
   } catch (err) {
     console.error('Database connection error:', err);
     // Important: Exit the process if the database connection fails
     process.exit(1); // Or handle it differently, but don't continue without DB
   }
-  app.listen(PORT, () => {
-    console.log(`Auth Server listening on port: ${PORT}`);
+  app.listen(config.port, () => {
+    console.log(`Auth Server listening on port: ${config.port}`);
   });
 };
 
