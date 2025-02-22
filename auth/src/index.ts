@@ -14,15 +14,8 @@ import { NotFoundError } from './errors/not-found-error';
 const app = express();
 
 app.set('trust proxy', true); // to allow traffic coming from proxy: ingress nginx
-
 app.use(express.json()); // middleware is responsible for parsing the body of incoming requests that have a Content-Type header of application/json
-app.use(
-  cookieSession({
-    keys: [config.cookieKey], // Use a simple key (NOT for production) needed when secure is set to true
-    signed: true, // disable encryption on cookie // jwt inside cookie will be encrypted
-    secure: true, // only https
-  })
-);
+app.use(cookieSession(config.cookie_settings));
 app.use(currentUserRouter);
 app.use(signoutRouter);
 app.use(singupRouter);

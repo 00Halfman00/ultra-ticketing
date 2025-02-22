@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import config from '../config';
 import { body, validationResult } from 'express-validator';
 import { RequestValidationError } from '../errors/request-validation-error';
 import { BadRequestError } from '../errors/bad-request-errors';
@@ -36,7 +37,7 @@ router.post(
           id: newUser.id,
           email: newUser.email,
         },
-        'asdf'
+        config.jwt_key
       );
       // store jwt session object
       req.session = {
