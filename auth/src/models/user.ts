@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Password } from '../services/password';
+import { PasswordHandler } from '../services/password-handler';
 
 /*  INTERFACE 1: UserAttrs
 Interface that describes the properties required to create an instance of a new user
@@ -29,25 +29,37 @@ interface UserDoc extends mongoose.Document {
 }
 
 // INTERFACE 3 BEING APPLIED
-const userSchema = new mongoose.Schema<UserDoc>({
-  // type the schema
-  email: {
-    type: String,
-    required: true,
-    unique: true, // add unique constraint for emails
+const userSchema = new mongoose.Schema<UserDoc>(
+  {
+    // type the schema
+    email: {
+      type: String,
+      required: true,
+      unique: true, // add unique constraint for emails
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.password;
+        delete ret.__v;
+      },
+    },
+  }
+);
 
 userSchema.pre(
   'save',
   async function (this: UserDoc, done: (err?: Error) => void) {
     if (this.isModified('password')) {
       try {
-        const hashed = await Password.toHash(this.get('password'));
+        const hashed = await PasswordHandler.toHash(this.get('password'));
         this.set('password', hashed);
         done();
       } catch (err) {
@@ -73,11 +85,6 @@ userSchema.statics.build = (attrs: UserAttrs): UserDoc => {
 const User = mongoose.model<UserDoc, UserModel>('User', userSchema, 'users');
 
 export { User };
-
-/*
-  I won't get a console.log in this file unless I call it from somewhere else,
-  like when the app starts up; I just call this file from there.
-*/
 
 /*
   Generics <> in typescript are used to describe the types being used inside of a

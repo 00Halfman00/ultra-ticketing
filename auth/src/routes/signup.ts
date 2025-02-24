@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import config from '../config';
-import { body, validationResult } from 'express-validator';
-import { RequestValidationError } from '../errors/request-validation-error';
+import { jwt_key } from '../config';
+import { bodySignupValidator } from '../services/body-validatiors';
+import { RequestValidation } from '../middlewares/request-validation';
 import { BadRequestError } from '../errors/bad-request-errors';
 import { User } from '../models/user';
 
@@ -10,18 +10,9 @@ const router = express.Router();
 
 router.post(
   '/api/users/signup',
-  [
-    body('email').isEmail().withMessage('Email must be valid'),
-    body('password')
-      .trim()
-      .isLength({ min: 4, max: 20 })
-      .withMessage('Password must be from 4 to 20 characters'),
-  ],
+  bodySignupValidator,
+  RequestValidation,
   async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      throw new RequestValidationError(errors.array());
-    }
     const { email, password } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -29,17 +20,14 @@ router.post(
       throw tmp;
     } else {
       const newUser = User.build({ email, password });
-      console.log('new user in signup before save: ', newUser);
       await newUser.save();
-      // generate jwt
       const userJwt = jwt.sign(
         {
           id: newUser.id,
           email: newUser.email,
         },
-        config.jwt_key
+        jwt_key
       );
-      // store jwt session object
       req.session = {
         jwt: userJwt,
       };

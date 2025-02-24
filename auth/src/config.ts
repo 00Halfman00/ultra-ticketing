@@ -23,7 +23,6 @@ if (!process.env.COOKIE_SECURE) {
 interface Config {
   port: number;
   db: string;
-  jwt_key: string;
   cookie_settings: {
     keys: string[];
     signed: boolean;
@@ -32,10 +31,9 @@ interface Config {
   // Add other configuration properties here
 }
 
-const config: Config = {
+export const config: Config = {
   port: +process.env.PORT,
   db: process.env.DATABASE_URL,
-  jwt_key: process.env.JWT_KEY,
   cookie_settings: {
     keys: [process.env.COOKIE_KEY1],
     signed: !!process.env.COOKIE_SIGNED,
@@ -44,4 +42,14 @@ const config: Config = {
   // Add other configuration properties here
 };
 
-export default config;
+export const jwt_key = process.env.JWT_KEY;
+
+interface PasswordSize {
+  min: number;
+  max: number;
+}
+
+export const passwordSize = {
+  min: 4,
+  max: 20,
+};

@@ -1,4 +1,4 @@
-import config from './config';
+import { config } from './config';
 import express from 'express';
 import 'express-async-errors';
 import mongoose from 'mongoose';
