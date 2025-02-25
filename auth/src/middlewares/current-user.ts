@@ -28,7 +28,7 @@ export const currentUser = (
     const payload = jwt.verify(req.session?.jwt, jwt_key) as UserPayload;
     req.currentUser = payload;
   } catch (err) {
-    throw new Error('Current User Error');
+    console.error(err);
   }
   return next();
 };
