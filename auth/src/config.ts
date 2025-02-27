@@ -20,8 +20,11 @@ if (!process.env.TERM) {
   throw new Error('Missing required environment variable: TERM');
 }
 if (!process.env.TERM_STATUS) {
-  throw new Error('Missing required environment variable: TERM');
+  throw new Error('Missing required environment variable: TERM_STATUS');
 }
+
+export const jwt_key = process.env.JWT_KEY!;
+
 interface Config {
   port: number;
   db: string;
@@ -33,6 +36,7 @@ interface Config {
     secure: boolean;
   };
 }
+
 export const config: Config = {
   port: +process.env.PORT,
   db: process.env.DATABASE_URL,
@@ -41,11 +45,9 @@ export const config: Config = {
   cookie_settings: {
     keys: [process.env.COOKIE_KEY1],
     signed: !!process.env.COOKIE_SIGNED,
-    secure: !!process.env.COOKIE_SECURE,
+    secure: !!(process.env.NODE_ENV != process.env.COOKIE_SECURE),
   },
 };
-
-export const jwt_key = process.env.JWT_KEY!;
 
 interface PasswordSize {
   min: number;

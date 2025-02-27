@@ -8,7 +8,6 @@ export const RequestValidation = (
   next: NextFunction
 ) => {
   const errors = validationResult(req);
-  console.log('in validation result middleware');
   if (!errors.isEmpty()) {
     throw new RequestValidationError(errors.array());
   }

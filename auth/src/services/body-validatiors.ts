@@ -5,7 +5,7 @@ export const bodySigninValidator = [
   body('email').isEmail().withMessage('Email must be valid'),
   body('password')
     .isLength(passwordSize)
-    .withMessage('Password must be from 4 and 20 characters.')
+    .withMessage('Password must be of the right size.')
     .trim()
     .notEmpty()
     .withMessage('You must supply a password'),
@@ -16,5 +16,5 @@ export const bodySignupValidator = [
   body('password')
     .trim()
     .isLength(passwordSize)
-    .withMessage('Password must be from 4 to 20 characters'),
+    .withMessage('Password must be of the right size'),
 ];
