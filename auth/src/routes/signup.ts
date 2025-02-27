@@ -5,7 +5,6 @@ import { bodySignupValidator } from '../services/body-validatiors';
 import { RequestValidation } from '../middlewares/request-validation';
 import { BadRequestError } from '../errors/bad-request-errors';
 import { User } from '../models/user';
-
 const router = express.Router();
 
 router.post(
@@ -19,12 +18,12 @@ router.post(
       const tmp = new BadRequestError('User with that email already exist.');
       throw tmp;
     } else {
-      const newUser = User.build({ email, password });
-      await newUser.save();
+      const user = User.build({ email, password });
+      await user.save();
       const userJwt = jwt.sign(
         {
-          id: newUser.id,
-          email: newUser.email,
+          id: user.id,
+          email: user.email,
         },
         jwt_key
       );
@@ -32,7 +31,7 @@ router.post(
         jwt: userJwt,
       };
 
-      res.status(201).send(newUser);
+      res.status(201).send(user);
     }
   }
 );

@@ -46,8 +46,8 @@ const userSchema = new mongoose.Schema<UserDoc>(
     toJSON: {
       transform(doc, ret) {
         ret.id = ret._id;
-        delete ret._id;
         delete ret.password;
+        delete ret._id;
         delete ret.__v;
       },
     },
@@ -66,9 +66,8 @@ userSchema.pre(
         console.error(err);
         done(err as Error); // Pass the error to the next middleware or error handler // Type assertion
       }
-    } else {
-      done();
     }
+    done();
   }
 );
 

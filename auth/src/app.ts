@@ -12,8 +12,8 @@ import { NotFoundError } from './errors/not-found-error';
 
 export const app = express();
 
-app.set('trust proxy', true); // to allow traffic coming from proxy: ingress nginx
-app.use(express.json()); // middleware is responsible for parsing the body of incoming requests that have a Content-Type header of application/json
+app.set(config.term, config.term_status);
+app.use(express.json());
 app.use(cookieSession(config.cookie_settings));
 app.use(currentUserRouter);
 app.use(signoutRouter);

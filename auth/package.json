@@ -4,8 +4,14 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "nodemon",
-    "test": "jest --watchAll --no-cache",
-    "testEnvironment": "node"
+    "test": "jest --watchAll --no-cache"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test/setup.ts"
+    ]
   },
   "keywords": [],
   "author": "",
