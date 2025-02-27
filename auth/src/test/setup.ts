@@ -4,7 +4,6 @@ import { app } from '../app';
 
 let mongo: MongoMemoryServer;
 beforeAll(async () => {
-  //process.env.JWT_KEY = 'asdfqwerty';  // remove line when not testing
   mongo = await MongoMemoryServer.create();
 
   const mongoUri = mongo.getUri();
