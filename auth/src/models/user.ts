@@ -18,7 +18,6 @@ to have custom methods that are being created here.
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
 }
-
 /*  INTERFACE 3: UserDoc
 Interface that describes the properties for a user Document.
 (Interface for what an instance of a single user will look like)
