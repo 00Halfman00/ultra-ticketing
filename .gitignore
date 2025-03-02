@@ -1,7 +1,52 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Environment variables
+.env.local
+.env.*
+
+# Logs
 *.log
-*.tmp
-*.swp
-.idea/
+
+# Testing
+coverage/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Yarn
+yarn-error.log
+
+# npmd
+npm-debug.log
+
+# Optional
+public/.cache/
+build/
+dist/
 .vscode/
-.env
+
+# Docker
+# Don't include .dockerignore here!
+
+# More optional entries
+*.swp # Vim swap files
+
+secrets.yaml
+*.secret.yaml
+
+.skaffold_cache/
+skaffold.local.yaml
+
+/var/log/nginx/
+*.nginx.log
+*.nginx.tmp
+
+

@@ -55,6 +55,6 @@ interface PasswordSize {
 }
 
 export const passwordSize: PasswordSize = {
-  min: 4,
-  max: 20,
+  min: 8,
+  max: 24,
 };
