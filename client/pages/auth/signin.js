@@ -6,7 +6,7 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { errors, doRequest } = useRequest({
-    url: '/api/users/signup',
+    url: '/api/users/signin',
     method: 'post',
     body: { email, password },
     onSuccess: () => Router.push('/'),
@@ -18,7 +18,7 @@ const Signup = () => {
   };
   return (
     <div className="container-md">
-      <h2>Sing UP</h2>
+      <h2>Sign In</h2>
       {errors}
       <form onSubmit={submitHandler}>
         <div className="form-group">
@@ -42,7 +42,7 @@ const Signup = () => {
           />
         </div>
         <div style={{ marginTop: '.5rem' }}>
-          <button className="btn btn-info" type="submit">
+          <button className="btn btn-primary" type="submit">
             sign in
           </button>
         </div>

@@ -49,4 +49,5 @@ skaffold.local.yaml
 *.nginx.log
 *.nginx.tmp
 
-
+# Common which has its own git repo for now
+common
